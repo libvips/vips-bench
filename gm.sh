@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+# set -x
 
 gm convert $1 \
 	-shave 100x100 \

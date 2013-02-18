@@ -9,7 +9,7 @@ height=`header -f Ysize $1`
 width=$((width - 200))
 height=$((height - 200))
 
-set -x
+# set -x
 
 convert "$1[${width}x${height}+100+100]" \
 	-resize 90x90% \

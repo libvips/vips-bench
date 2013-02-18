@@ -6,7 +6,7 @@ height=`header -f Ysize $1`
 width=$((width - 200))
 height=$((height - 200))
 
-set -x
+# set -x
 
 vips im_extract_area $1 t1.v 100 100 $width $height
 # a bit slower
@@ -21,6 +21,7 @@ cat > mask.con <<EOF
 EOF
 vips im_conv t2.v $2 mask.con
 
+# again a little slower for small masks
 # cat > mask.con <<EOF
 # 3 1 8 0
 # -1 8 -1

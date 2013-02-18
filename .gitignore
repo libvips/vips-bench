@@ -1,0 +1,5 @@
+*.swp
+freeimage
+mask*
+opencv
+vips-cc
