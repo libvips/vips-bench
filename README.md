@@ -39,8 +39,7 @@ to lag as well.
 # Results
 
 The
-[http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use][speed 
-and memory use page] on the libvips website has a table of results. 
+[speed and memory use page](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) on the libvips website has a table of results. 
 
 # TODO
 
