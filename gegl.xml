@@ -1,0 +1,34 @@
+
+<?xml version='1.0' encoding='UTF-8'?>
+<gegl>
+
+ <node operation='gegl:unsharp-mask'>
+   <params>
+     <param name='std-dev'>0.1</param>
+   </params>
+ </node>
+
+ <node operation='gegl:scale'>
+   <params>
+     <param name='filter'>linear</param>
+     <param name='hard-edges'>false</param>
+     <param name='x'>0.9</param>
+     <param name='y'>0.9</param>
+   </params>
+ </node>
+
+ <node operation='gegl:crop'>
+   <params>
+     <param name='x'>100</param>
+     <param name='y'>100</param>
+     <param name='width'>4800</param>
+     <param name='height'>4800</param>
+   </params>
+ </node>
+
+ <node operation='gegl:load'>
+   <params>
+     <param name='path'>wtc_small.png</param>
+   </params>
+ </node>
+</gegl>
