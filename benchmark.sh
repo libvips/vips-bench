@@ -12,11 +12,14 @@ vips colourspace sample2.v $tmp/t1.v srgb
 vips colourspace sample2.v $tmp/t1.v srgb
 vips replicate $tmp/t1.v $tmp/t2.v 20 15
 vips extract_area $tmp/t2.v $tmp/x.tif[tile] 0 0 5000 5000
+vips copy $tmp/x.tif $tmp/x_strip.tif
 header $tmp/x.tif
 
 # run a command three times, return the fastest real time
+
 # sleep for two secs between runs to let the system settle -- after a run
 # there's a short period of disc chatter we want to avoid
+
 get_time() {
 	cmd=$*
 
@@ -54,6 +57,8 @@ benchmark() {
 	echo peak memuse
 	get_mem $cmd
 }
+
+benchmark ./ei.sh $tmp/x_strip.tif $tmp/x2.tif
 
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark ./vips-cc $tmp/x.tif $tmp/x2.tif

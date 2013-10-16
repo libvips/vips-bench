@@ -27,6 +27,7 @@ can do this by running
 	sudo apt-get install libvips
 	sudo apt-get install nip2
 	sudo apt-get install libfreeimage-dev
+	sudo apt-get install exactimage
 
 	gem install rmagick
 	gem install ruby-vips
