@@ -40,55 +40,64 @@ get_time() {
 	echo $t1
 }
 
-# run a command and show peak memuse
+# run a command and get a trace of memuse in a csv file
 get_mem() {
-	cmd=$*
+	name=$1
+	cmd=$2
 
-	./peakmem.pl $cmd
+	(top -b -d 0.01 | ./parse-top.rb $name) > $name.csv &
+	$cmd
+	killall top 
+	tail -1 $name.csv | awk '{ print $3 }'
 }
 
 # benchmark
 benchmark() {
-	cmd=$*
+	name=$1
+	cmd=$2
 
-	echo testing $cmd ...
+	echo testing $name ...
 	echo -n "time "
 	get_time $cmd
-	echo peak memuse
-	get_mem $cmd
+	echo -n "peak mem"
+	get_mem $name "$cmd"
 }
 
-benchmark ./ei.sh $tmp/x_strip.tif $tmp/x2.tif
+benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
-benchmark ./vips-cc $tmp/x.tif $tmp/x2.tif
+benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./vips.py $tmp/x.tif $tmp/x2.tif
+benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./ruby-vips.rb $tmp/x.tif $tmp/x2.tif
+benchmark ruby-vips.rb "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./vips.sh $tmp/x.tif $tmp/x2.tif
+benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./nip2bench.sh $tmp/x.tif -o $tmp/x2.tif
+benchmark nip2 "./nip2bench.sh $tmp/x.tif -o $tmp/x2.tif"
 
 g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
-benchmark ./opencv $tmp/x.tif $tmp/x2.tif
+benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./gm.sh $tmp/x.tif $tmp/x2.tif
+benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./pil.py $tmp/x.tif $tmp/x2.tif
+benchmark pil "./pil.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./rmagick.rb $tmp/x.tif $tmp/x2.tif
+benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./im.sh $tmp/x.tif $tmp/x2.tif
+benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc freeimage.c -lfreeimage -o freeimage
-benchmark ./freeimage $tmp/x.tif $tmp/x2.tif
+benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
 
-benchmark ./netpbm.sh $tmp/x.tif $tmp/x2.tif
+benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 # imagescience won't install on my work machine, how odd
 # benchmark ./is.rb $tmp/x.tif $tmp/x2.tif
+
+pr -tmJ -s, *.csv > memtrace.csv
+
+echo "memory traces in memtrace.csv"
 
 echo clearing test area ...
 rm -rf $tmp

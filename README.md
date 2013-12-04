@@ -31,6 +31,10 @@ can do this by running
 
 	gem install rmagick
 	gem install ruby-vips
+
+There's stuff here to test imagescience as well, but it's not installing for 
+me for some reason. It might work for you:
+
 	gem install image_science
 
 You may need more recent versions of some packages. The netpbm in Ubuntu is
