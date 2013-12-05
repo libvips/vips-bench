@@ -26,7 +26,7 @@ main( int argc, char **argv )
 		vips_error_exit( NULL );
 	}
 
-	if( !(in = vips_image_new_mode( argv[1], "rs" )) )
+	if( !(in = vips_image_new_mode( argv[1], "r" )) )
 		vips_error_exit( "unable to read %s", argv[1] );
 	t = (VipsImage **) vips_object_local_array( VIPS_OBJECT( in ), 4 );
 

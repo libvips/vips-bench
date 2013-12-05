@@ -55,6 +55,7 @@ while ( <PIPE> ) {
 			$maps{$v} = $length;
 			$currentSize += $length;
 		}
+
 	} elsif ( /munmap\((\w+),/ ) {
 		$v = $pid . $1;
 		if ( defined( $maps{$v} )  ) {

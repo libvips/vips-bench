@@ -5,4 +5,5 @@ freeimage
 mask*
 opencv
 vips-cc
+vips-c
 tmp

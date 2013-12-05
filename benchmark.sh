@@ -66,10 +66,11 @@ benchmark() {
 
 rm *.csv
 
-benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
-
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
+
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
@@ -78,6 +79,8 @@ benchmark ruby-vips.rb "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark nip2 "./nip2bench.sh $tmp/x.tif -o $tmp/x2.tif"
+
+benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
 benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
