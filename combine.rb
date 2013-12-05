@@ -15,7 +15,19 @@ ARGV.each do |filename|
     max_lines = [max_lines, n_lines].max
 end
 
+data.each do |filename, lines|
+    lines[1..-1].sort! {|l1, l2| l1[0] <=> l2[0]}
+end
+
 (0 .. max_lines).each do |line_no|
-    data.each do |filename|
-        if line_no < data[filename].length
-            puts "
+    output_line = []
+    data.each do |filename, lines|
+        if line_no < lines.length
+            output_line << lines[line_no]
+        else
+            output_line << [[]] * lines[0].length
+        end
+    end
+
+    puts output_line.join(", ")
+end

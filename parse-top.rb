@@ -22,6 +22,7 @@ CSV($stdin, :col_sep => " ") do |csv_in|
         mem = $~[1].to_i
         unit = $~[2]
         mem *= (2 ** 10) ** units[unit] if units[unit]
+        mem /= (2 ** 10.to_f) ** 2
         peak = mem if mem > peak
 
         if timestr !~ /([0-9]+):([0-9]+)\.([0-9]+)/
@@ -29,6 +30,8 @@ CSV($stdin, :col_sep => " ") do |csv_in|
             next
         end
         time = $~[1].to_i * 60 + $~[2].to_i + $~[3].to_f / 100
+
+        next if mem == 0 or time == 0
 
         puts "#{time}, #{mem}, #{peak}"
     end

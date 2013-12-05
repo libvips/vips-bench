@@ -45,10 +45,10 @@ get_mem() {
 	name=$1
 	cmd=$2
 
-	(top -b -d 0.01 | ./parse-top.rb $name) > $name.csv &
+	(top -b -d 0.01 | ./parse-top.rb "$name") > "$name.csv" &
 	$cmd
 	killall top 
-	tail -1 $name.csv | awk '{ print $3 }'
+	sleep 0.5
 }
 
 # benchmark
@@ -59,9 +59,12 @@ benchmark() {
 	echo testing $name ...
 	echo -n "time "
 	get_time $cmd
-	echo -n "peak mem"
-	get_mem $name "$cmd"
+	echo -n "peak mem "
+	get_mem "$name" "$cmd"
+	tail -1 "$name.csv" | awk '{ print $3 }'
 }
+
+rm *.csv
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
@@ -95,9 +98,9 @@ benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 # imagescience won't install on my work machine, how odd
 # benchmark ./is.rb $tmp/x.tif $tmp/x2.tif
 
-pr -tmJ -s, *.csv > memtrace.csv
+./combine.rb *.csv > memtrace.csv
 
-echo "memory traces in memtrace.csv"
+echo "combined memory traces in memtrace.csv"
 
 echo clearing test area ...
 rm -rf $tmp

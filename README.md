@@ -19,18 +19,11 @@ to look through the output and make sure everything is working correctly. In
 particular, make sure you have all the packages installed. On Ubuntu, you
 can do this by running
 
-	sudo apt-get install imagemagick
-	sudo apt-get install graphicsmagick
-	sudo apt-get install libopencv-dev
-	sudo apt-get install python-imaging
-	sudo apt-get install netpbm
-	sudo apt-get install libvips
-	sudo apt-get install nip2
-	sudo apt-get install libfreeimage-dev
-	sudo apt-get install exactimage
+	sudo apt-get install imagemagick graphicsmagick libopencv-dev \
+		python-imaging netpbm libvips nip2 libfreeimage-dev \
+		exactimage
 
-	gem install rmagick
-	gem install ruby-vips
+	gem install rmagick ruby-vips
 
 There's stuff here to test imagescience as well, but it's not installing for 
 me for some reason. It might work for you:
