@@ -12,7 +12,9 @@ int main (int argc, char **argv)
         in.
                 extract_area (100, 100, in.Xsize () - 200, in.Ysize () - 200).
                 affine (0.9, 0, 0, 0.9, 0, 0,
-                        0, 0, in.Xsize () * 0.9, in.Ysize () * 0.9).
+                        0, 0, 
+			(in.Xsize () - 200) * 0.9, 
+			(in.Ysize () - 200) * 0.9).
                 conv (mask).
                 write (argv[2]);
 
