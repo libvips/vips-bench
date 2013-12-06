@@ -66,11 +66,11 @@ benchmark() {
 
 rm *.csv
 
-g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
-benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
+
+g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
+benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
