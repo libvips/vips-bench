@@ -12,7 +12,8 @@ require 'set'
 program = ARGV[0]
 units = { 'm' => 2, 'g' => 3 }
 
-puts "#{program},,"
+puts ",#{program},"
+puts "0,0,0"
 
 page_total = 0
 peak_memory = 0
@@ -29,7 +30,7 @@ CSV($stdin, :col_sep => " ") do |csv_in|
             page_total = 0
         end
 
-        next if not row[10] =~ /#{program}/
+        next if not row[10 .. -1].join =~ /#{program}/
 
         memstr = row[5]
 
@@ -45,3 +46,5 @@ CSV($stdin, :col_sep => " ") do |csv_in|
         page_total += mem
     end
 end
+
+puts "#{Time.now - start_time}, 0, #{peak_memory}"

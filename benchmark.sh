@@ -37,7 +37,7 @@ get_time() {
 		t1=$t3
 	fi
 
-	echo $t1
+	cmd_time=$t1
 }
 
 # run a command and get a trace of memuse in a csv file
@@ -46,13 +46,14 @@ get_mem() {
 	cmd=$2
 
 	rm -f /tmp/vipsbench.lock
-	(while [ ! -f /tmp/vipsbench.lock ]; do \
-		ps u; \
-		sleep 0.1; \
+	(while [ ! -f /tmp/vipsbench.lock ]; do 
+		ps u; 
+		sleep 0.1; 
 	 done | ./parse-ps.rb "$name" > "$name.csv") &
-	$cmd
+	nice $cmd > /dev/null
 	touch /tmp/vipsbench.lock
-	sleep 0.5
+	sleep 1
+	cmd_mem=$(tail -1 "$name.csv" | awk '{ print $3 }')
 }
 
 # benchmark
@@ -60,15 +61,23 @@ benchmark() {
 	name=$1
 	cmd=$2
 
-	echo testing $name ...
-	echo -n "time "
+	echo -n "$name, "
 	get_time $cmd
-	echo -n "peak mem "
+	echo -n "$cmd_time, "
 	get_mem "$name" "$cmd"
-	tail -1 "$name.csv" | awk '{ print $3 }'
+	echo -n $cmd_mem 
+	echo
+
+	echo "time, $cmd_time, " >> "$name.csv"
 }
 
 rm *.csv
+
+echo "program, time (s), peak memory (MB)"
+
+benchmark nip2 "./nip2bench.sh $tmp/x.tif -o $tmp/x2.tif"
+
+benchmark ruby-vips.rb "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
@@ -78,11 +87,7 @@ benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark ruby-vips.rb "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
-
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
-
-benchmark nip2 "./nip2bench.sh $tmp/x.tif -o $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
