@@ -47,6 +47,4 @@ The Octave test (vips.m) segvs for me on Ubuntu 13.04, try again later.
 
 why is vips-cc faster than vips-c? 
 
-why doesn't vips-c have a flat mem trace?
-
 

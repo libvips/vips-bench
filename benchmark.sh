@@ -45,9 +45,13 @@ get_mem() {
 	name=$1
 	cmd=$2
 
-	(top -b -d 0.01 | ./parse-top.rb "$name") > "$name.csv" &
+	rm -f /tmp/vipsbench.lock
+	(while [ ! -f /tmp/vipsbench.lock ]; do \
+		ps u; \
+		sleep 0.1; \
+	 done | ./parse-ps.rb "$name" > "$name.csv") &
 	$cmd
-	killall top 
+	touch /tmp/vipsbench.lock
 	sleep 0.5
 }
 
