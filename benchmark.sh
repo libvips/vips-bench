@@ -20,6 +20,8 @@ header $tmp/x.tif
 # sleep for two secs between runs to let the system settle -- after a run
 # there's a short period of disc chatter we want to avoid
 
+# check that services like tracker are not running
+
 get_time() {
 	cmd=$*
 
@@ -37,6 +39,9 @@ get_time() {
 		t1=$t3
 	fi
 
+	# remove any newlines
+	t1=$(echo $t1)
+
 	cmd_time=$t1
 }
 
@@ -47,8 +52,8 @@ get_mem() {
 
 	rm -f /tmp/vipsbench.lock
 	(while [ ! -f /tmp/vipsbench.lock ]; do 
-		ps u; 
-		sleep 0.1; 
+		ps u
+		sleep 0.01
 	 done | ./parse-ps.rb "$name" > "$name.csv") &
 	nice $cmd > /dev/null
 	touch /tmp/vipsbench.lock
@@ -71,13 +76,13 @@ benchmark() {
 	echo "time, $cmd_time, " >> "$name.csv"
 }
 
-rm *.csv
+rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
-benchmark nip2 "./nip2bench.sh $tmp/x.tif -o $tmp/x2.tif"
+benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 
-benchmark ruby-vips.rb "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
+benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"

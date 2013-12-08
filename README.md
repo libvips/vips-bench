@@ -14,9 +14,6 @@ There's a driver program -- run
 
 to generate the test image and run all the benchmarks. 
 
-nip2.csv has an extra CR in which stops the time column in memtrace from
-working ... delete this and recombine
-
 The program is very simple and doesn't do much error checking. You'll need
 to look through the output and make sure everything is working correctly. In
 particular, make sure you have all the packages installed. On Ubuntu, you
@@ -49,5 +46,4 @@ The peakmem.pl program doesn't seem to be working correctly, investigate.
 The Octave test (vips.m) segvs for me on Ubuntu 13.04, try again later. 
 
 why is vips-cc faster than vips-c? 
-
 
