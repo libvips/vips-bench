@@ -10,9 +10,10 @@ require 'csv'
 require 'set'
 
 program = ARGV[0]
-units = { 'k' => 1, 'm' => 2, 'g' => 3 }
+units = { 'm' => 2, 'g' => 3 }
 
-puts "#{program},,"
+puts ",#{program},"
+puts "0,0,0"
 
 page_total = 0
 peak_memory = 0
@@ -20,14 +21,16 @@ start_time = 0
 
 CSV($stdin, :col_sep => " ") do |csv_in|  
     csv_in.each do |row| 
-        if row[0] =~ /top/ and page_total > 1
-            start_time = Time.now if start_time == 0
-            peak_memory = [peak_memory, page_total].max
-            puts "#{Time.now - start_time}, #{page_total}, #{peak_memory}"
+        if row[0] =~ /USER/ 
+            if page_total > 1
+                start_time = Time.now if start_time == 0
+                peak_memory = [peak_memory, page_total].max
+                puts "#{Time.now - start_time}, #{page_total}, #{peak_memory}"
+            end
             page_total = 0
         end
 
-        next if not row[11] =~ /#{program}/
+        next if not row[10 .. -1].join =~ /#{program}/
 
         memstr = row[5]
 
@@ -35,13 +38,13 @@ CSV($stdin, :col_sep => " ") do |csv_in|
             puts "bad memory size #{memstr}"
             next
         end
-        mem = $~[1].to_i
+        mem = $~[1].to_i * 1024
         unit = $~[2]
         mem *= (2 ** 10) ** units[unit] if units[unit]
         mem /= (2 ** 10.to_f) ** 2
 
         page_total += mem
-
-        # p row
     end
 end
+
+puts "#{Time.now - start_time}, 0, #{peak_memory}"

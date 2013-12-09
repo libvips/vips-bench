@@ -7,7 +7,7 @@ int
 main( int argc, char **argv )
 {
 	GOptionContext *context;
-	VipsImage *in;
+	VipsImage *global;
 	VipsImage **t;
 
 	GError *error = NULL;
@@ -26,22 +26,24 @@ main( int argc, char **argv )
 		vips_error_exit( NULL );
 	}
 
-	if( !(in = vips_image_new_mode( argv[1], "r" )) )
+	global = vips_image_new();
+	t = (VipsImage **) vips_object_local_array( VIPS_OBJECT( global ), 5 );
+
+	if( !(t[0] = vips_image_new_mode( argv[1], "r" )) )
 		vips_error_exit( "unable to read %s", argv[1] );
-	t = (VipsImage **) vips_object_local_array( VIPS_OBJECT( in ), 4 );
 
-	t[0] = vips_image_new_matrixv( 3, 3, 
+	t[1] = vips_image_new_matrixv( 3, 3, 
 		-1, -1, -1, -1, 16,-1, -1, -1, -1 );
-	vips_image_set_double( t[0], "scale", 8 ); 
+	vips_image_set_double( t[1], "scale", 8 ); 
 
-	if( vips_extract_area( in, &t[1], 
-                100, 100, in->Xsize - 200, in->Ysize - 200, NULL ) ||
-		vips_affine( t[1], &t[2], 0.9, 0, 0, 0.9, NULL ) ||
-		vips_conv( t[2], &t[3], t[0], NULL ) ||
-		vips_image_write_to_file( t[3], argv[2] ) )
+	if( vips_extract_area( t[0], &t[2], 
+                100, 100, t[0]->Xsize - 200, t[0]->Ysize - 200, NULL ) ||
+		vips_affine( t[2], &t[3], 0.9, 0, 0, 0.9, NULL ) ||
+		vips_conv( t[3], &t[4], t[1], NULL ) ||
+		vips_image_write_to_file( t[4], argv[2] ) )
 		return( -1 );
 
-	g_object_unref( in );
+	g_object_unref( global );
 
 	return( 0 );
 }

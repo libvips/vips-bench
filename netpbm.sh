@@ -9,8 +9,8 @@ P2
 14 14 14
 EOF
 
-tifftopnm $1 | \
+tifftopnm $1 2> /dev/null | \
 	pnmcut -left 100 -right -100 -top 100 -bottom -100 | \
 	pnmscale 0.9 | \
 	pnmconvol mask | \
-	pnmtotiff -truecolor -color > $2
+	pnmtotiff -truecolor -color 2> /dev/null > $2
