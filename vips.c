@@ -25,6 +25,7 @@ main( int argc, char **argv )
 
 		vips_error_exit( NULL );
 	}
+	g_option_context_free( context );
 
 	global = vips_image_new();
 	t = (VipsImage **) vips_object_local_array( VIPS_OBJECT( global ), 5 );
