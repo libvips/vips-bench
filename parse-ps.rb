@@ -47,4 +47,5 @@ CSV($stdin, :col_sep => " ") do |csv_in|
     end
 end
 
+start_time = Time.now if start_time == 0
 puts "#{Time.now - start_time}, 0, #{peak_memory}"

@@ -80,15 +80,15 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
+g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
+benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
+
 benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
-
-g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
-benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
