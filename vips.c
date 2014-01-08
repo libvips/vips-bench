@@ -34,7 +34,9 @@ main( int argc, char **argv )
 		vips_error_exit( "unable to read %s", argv[1] );
 
 	t[1] = vips_image_new_matrixv( 3, 3, 
-		-1, -1, -1, -1, 16,-1, -1, -1, -1 );
+		-1.0, -1.0, -1.0, 
+		-1.0, 16.0, -1.0, 
+		-1.0, -1.0, -1.0 );
 	vips_image_set_double( t[1], "scale", 8 ); 
 
 	if( vips_extract_area( t[0], &t[2], 
