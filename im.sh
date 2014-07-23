@@ -3,8 +3,8 @@
 # we crop on load, it's a bit quicker and saves some memory
 # we can't crop 100 pixels with the crop-on-load syntax, so we have to
 # find the width and height ourselves
-width=`header -f Xsize $1`
-height=`header -f Ysize $1`
+width=$(vipsheader -f Xsize $1)
+height=$(vipsheader -f Ysize $1)
 
 width=$((width - 200))
 height=$((height - 200))

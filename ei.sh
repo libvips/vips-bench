@@ -1,7 +1,7 @@
 #!/bin/bash
 
-width=`header -f Xsize $1`
-height=`header -f Ysize $1`
+width=$(vipsheader -f Xsize $1)
+height=$(vipsheader -f Ysize $1)
 
 width=$((width - 200))
 height=$((height - 200))

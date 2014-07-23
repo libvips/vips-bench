@@ -1,6 +1,6 @@
 # vips-bench 
 
-We've written programs using number of different image processing system to
+We've written programs using number of different image processing systems to
 load a TIFF image, crop 100 pixels off every edge, shrink by 10% with bilinear
 interpolation, sharpen with a 3x3 convolution and save again. It's a trivial
 test but it does give some idea of the speed and memory behaviour of these

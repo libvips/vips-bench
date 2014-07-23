@@ -13,7 +13,7 @@ vips colourspace sample2.v $tmp/t1.v srgb
 vips replicate $tmp/t1.v $tmp/t2.v 20 15
 vips extract_area $tmp/t2.v $tmp/x.tif[tile] 0 0 5000 5000
 vips copy $tmp/x.tif $tmp/x_strip.tif
-header $tmp/x.tif
+vipsheader $tmp/x.tif
 
 # run a command three times, return the fastest real time
 
