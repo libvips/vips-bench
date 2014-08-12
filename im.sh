@@ -11,7 +11,9 @@ height=$((height - 200))
 
 # set -x
 
+# -filter triangle acts as bilinear with -resize and small size changes
+
 convert "$1[${width}x${height}+100+100]" \
-	-resize 90x90% \
+	-filter triangle -resize 90x90% \
 	-convolve "-1, -1, -1, -1, 16, -1, -1, -1, -1" \
 	$2
