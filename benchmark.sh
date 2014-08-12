@@ -93,18 +93,18 @@ benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
-
-benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
-
-benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
-
 benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 
 g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
 benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
 
+benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
+
 benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
+
+benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
+
+benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
