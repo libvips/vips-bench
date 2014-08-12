@@ -1,10 +1,7 @@
 #!/usr/bin/ruby
 
-# watch the output of top -b, sum RES of processes matching a pattern and output
+# watch the output of ps, sum RSS of processes matching a pattern and output
 # time and size in MB
-#
-# this will fail if top has been customized at all, we should probably use ps
-# and a loop instead
 
 require 'csv'
 require 'set'
@@ -31,6 +28,9 @@ CSV($stdin, :col_sep => " ") do |csv_in|
         end
 
         next if not row[10 .. -1].join =~ /#{program}/
+
+        # we need to not count ourselves
+        next if row[10 .. -1].join =~ /parse-ps/
 
         memstr = row[5]
 

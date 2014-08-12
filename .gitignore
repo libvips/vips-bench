@@ -7,3 +7,5 @@ opencv
 vips-cc
 vips-c
 tmp
+gegl
+a.out
