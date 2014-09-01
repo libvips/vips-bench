@@ -81,6 +81,8 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
+benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
+
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
