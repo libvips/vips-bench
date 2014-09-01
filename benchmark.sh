@@ -81,8 +81,6 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
-benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
-
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
@@ -114,6 +112,8 @@ gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
 
 benchmark pil "./pil.py $tmp/x.tif $tmp/x2.tif"
+
+benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gegl.c `pkg-config gegl-0.2 --cflags --libs` -o gegl
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
