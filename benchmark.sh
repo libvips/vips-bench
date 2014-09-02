@@ -14,6 +14,7 @@ vips replicate $tmp/t1.v $tmp/t2.v 20 15
 vips extract_area $tmp/t2.v $tmp/x.tif[tile] 0 0 5000 5000
 vips copy $tmp/x.tif $tmp/x_strip.tif
 vips copy $tmp/x.tif $tmp/x.jpg
+vips copy $tmp/x.tif $tmp/x.ppm
 vipsheader $tmp/x.tif
 
 # run a command three times, return the fastest real time
@@ -82,6 +83,10 @@ rm -f *.csv
 echo "program, time (s), peak memory (MB)"
 
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
+echo -n ppm-
+benchmark vips-cc "./vips-cc $tmp/x.ppm $tmp/x2.ppm"
+
+g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
@@ -97,6 +102,9 @@ benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 
 g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
 benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
+
+echo -n ppm-
+benchmark gm "./gm.sh $tmp/x.ppm $tmp/x2.ppm"
 
 benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
