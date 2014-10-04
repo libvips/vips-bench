@@ -82,6 +82,8 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
+benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
+
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 echo -n ppm-
 benchmark vips-cc "./vips-cc $tmp/x.ppm $tmp/x2.ppm"

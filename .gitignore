@@ -1,5 +1,6 @@
 *.swp
 *.csv
+*.pyc
 tmp
 freeimage
 mask*
