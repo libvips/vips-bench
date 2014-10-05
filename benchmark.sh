@@ -118,6 +118,8 @@ benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
+benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
+
 gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
 
