@@ -25,6 +25,7 @@ CSV($stdin, :col_sep => " ") do |csv_in|
                 puts "#{Time.now - start_time}, #{page_total}, #{peak_memory}"
             end
             page_total = 0
+            next
         end
 
         next if not row[10 .. -1].join =~ /#{program}/
