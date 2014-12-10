@@ -98,6 +98,9 @@ benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
+# still in development
+# benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
+
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
@@ -130,7 +133,7 @@ benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 gcc -Wall gegl.c `pkg-config gegl-0.2 --cflags --libs` -o gegl
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-# imagescience won't install on my work machine, how odd
+# imagescience won't install on my machine, how odd
 # benchmark ./is.rb $tmp/x.tif $tmp/x2.tif
 
 ./combine.rb *.csv > memtrace.csv
