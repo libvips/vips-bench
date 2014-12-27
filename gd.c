@@ -10,9 +10,7 @@ int
 main( int argc, char **argv )
 {
 	FILE *fp;
-	gdImagePtr im, x;
-	int dx, dy;
-
+	gdImagePtr original, cropped,resized;
 	if( argc != 3 ) {
 		printf( "usage: %s in-jpeg out-jpeg\n", argv[0] );
 		exit( 1 );
@@ -22,34 +20,48 @@ main( int argc, char **argv )
 		printf( "unable to open \"%s\"\n", argv[1] );
 		exit( 1 );
 	}
-	if( !(im = gdImageCreateFromJpeg( fp )) ) {
+	if( !(original = gdImageCreateFromJpeg( fp )) ) {
 		printf( "unable to load \"%s\"\n", argv[1] );
 		exit( 1 );
 	}
 	fclose( fp );
 
-	dx = 0.9 * (im->sx - 200);
-	dy = 0.9 * (im->sy - 200);
-	if( !(x = gdImageCreateTrueColor( dx, dy )) ) {
-		printf( "unable to create temp image\n" ); 
-		exit( 1 );
-	}
-	gdImageCopyResampled( x, im, 
-		0, 0, 100, 100, 
-		dx, dy, im->sx - 200, im->sy - 200 ); 
-	gdImageDestroy( im );
-	im = x;
 
-	gdImageSharpen( im, 75 );
+  gdRect crop;
+  crop.x = 100;
+  crop.y = 100;
+  crop.width = original->sx - 200;
+  crop.height = original->sy - 200;
+  cropped = gdImageCrop(original, &crop);
+  gdImageDestroy( original );
+  original = 0;
+
+  if( !(cropped) ) {
+    printf( "unable to crop image\n" ); 
+    exit( 1 );
+  }
+  
+
+  resized = gdImageScale(cropped, crop.width * 0.9, crop.height * 0.9);
+  gdImageDestroy( cropped );
+  cropped = 0;
+
+  if( !(resized) ) {
+    printf( "unable to resize image\n" ); 
+    exit( 1 );
+  }
+
+  //gdImageSharpen is extremely slow
+	//gdImageSharpen( resized, 75 );
 
 	if( !(fp = fopen( argv[2], "w" )) ) {
 		printf( "unable to open \"%s\"\n", argv[2] );
 		exit( 1 );
 	}
-	gdImageJpeg( im, fp, -1 );
+	gdImageJpeg( resized, fp, -1 );
 	fclose( fp );
 
-	gdImageDestroy( im );
+	gdImageDestroy( resized );
 
 	return( 0 ); 
 }
