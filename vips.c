@@ -12,7 +12,7 @@ main( int argc, char **argv )
 
 	GError *error = NULL;
 
-	if( vips_init( argv[0] ) )
+	if( VIPS_INIT( argv[0] ) )
 		return( -1 );
 
 	context = g_option_context_new( " - VIPS benchmark program" );
@@ -43,7 +43,7 @@ main( int argc, char **argv )
 
 	if( vips_extract_area( t[0], &t[2], 
                 100, 100, t[0]->Xsize - 200, t[0]->Ysize - 200, NULL ) ||
-		vips_affine( t[2], &t[3], 0.9, 0, 0, 0.9, NULL ) ||
+		vips_similarity( t[2], &t[3], "scale", 0.9, NULL ) ||
 		vips_conv( t[3], &t[4], t[1], NULL ) ||
 		vips_image_write_to_file( t[4], argv[2], NULL ) )
 		return( -1 );
