@@ -82,24 +82,28 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
-g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 echo -n ppm-
-benchmark vips-cc "./vips-cc $tmp/x.ppm $tmp/x2.ppm"
-
-g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
-benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
-benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
+g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
+benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
+
+benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 # still in development
 # benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
+
+echo -n jpg-
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
@@ -115,11 +119,11 @@ benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
-benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
-
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
+
+benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
 benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
@@ -127,6 +131,9 @@ gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
 
 benchmark pil "./pil.py $tmp/x.tif $tmp/x2.tif"
+
+gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
+benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 

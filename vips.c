@@ -31,6 +31,7 @@ main( int argc, char **argv )
 	t = (VipsImage **) vips_object_local_array( VIPS_OBJECT( global ), 5 );
 
 	if( !(t[0] = vips_image_new_from_file( argv[1], 
+		"access", VIPS_ACCESS_SEQUENTIAL,
 		NULL )) )
 		vips_error_exit( "unable to read %s", argv[1] );
 
