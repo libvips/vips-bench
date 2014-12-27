@@ -5,7 +5,7 @@
 
 int main (int argc, char **argv)
 {
-        vips::VImage in (argv[1], "rs");
+        vips::VImage in (argv[1], "r");
         vips::VIMask mask (3, 3, 8, 0,
                 -1, -1, -1, -1, 16,-1, -1, -1, -1);
 
