@@ -1,7 +1,7 @@
-#!/usr/bin/python 
+#!/usr/bin/python
 
-import Image, sys
-import ImageFilter 
+import sys
+from PIL import Image, ImageFilter
 
 im = Image.open (sys.argv[1])
 
@@ -10,7 +10,7 @@ im = im.crop ((100, 100, im.size[0] - 100, im.size[1] - 100))
 
 # Shrink by 10%
 im = im.resize ((int (im.size[0] * 0.9), int (im.size[1] * 0.9)),
-        Image.BILINEAR) 
+        Image.BILINEAR)
 
 # sharpen
 filter = ImageFilter.Kernel ((3, 3),
