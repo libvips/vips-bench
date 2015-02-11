@@ -89,6 +89,9 @@ benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
+g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
+benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
+
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
@@ -114,6 +117,9 @@ benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
 
 echo -n ppm-
 benchmark gm "./gm.sh $tmp/x.ppm $tmp/x2.ppm"
+
+echo -n jpg-
+benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
