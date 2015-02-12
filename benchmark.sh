@@ -89,13 +89,13 @@ benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
-g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
-benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
-
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
+
+g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
+benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 
@@ -118,10 +118,10 @@ benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
 echo -n ppm-
 benchmark gm "./gm.sh $tmp/x.ppm $tmp/x2.ppm"
 
+benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
+
 echo -n jpg-
 benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
-
-benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
@@ -131,12 +131,13 @@ benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
+# benchmark pil "./pil.py $tmp/x.tif $tmp/x2.tif"
+benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
+
 benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
-
-benchmark pil "./pil.py $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
