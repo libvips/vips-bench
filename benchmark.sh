@@ -17,6 +17,19 @@ vips copy $tmp/x.tif $tmp/x.jpg
 vips copy $tmp/x.tif $tmp/x.ppm
 vipsheader $tmp/x.tif
 
+# try to portably find the real time a command took to run
+
+real_time() {
+	# capture command output to y, time output to x
+	(time -p $* &> tmp/y) &> tmp/x
+
+	# get just the "real 0.2" line
+	real=($(cat tmp/x | grep real))
+
+	# just the the number
+	return_real_time=${real[1]}
+}
+
 # run a command three times, return the fastest real time
 
 # sleep for two secs between runs to let the system settle -- after a run
@@ -28,11 +41,14 @@ get_time() {
 	cmd=$*
 
 	sleep 2
-	t1=$(/usr/bin/time -f %e $cmd 2>&1) 
+	real_time $cmd
+	t1=$return_real_time
 	sleep 2
-	t2=$(/usr/bin/time -f %e $cmd 2>&1) 
+	real_time $cmd
+	t2=$return_real_time
 	sleep 2
-	t3=$(/usr/bin/time -f %e $cmd 2>&1) 
+	real_time $cmd
+	t3=$return_real_time
 
 	if [[ $t2 < $t1 ]]; then
 		t1=$t2
@@ -40,9 +56,6 @@ get_time() {
 	if [[ $t3 < $t1 ]]; then
 		t1=$t3
 	fi
-
-	# remove any newlines
-	t1=$(echo $t1)
 
 	cmd_time=$t1
 }
@@ -122,6 +135,9 @@ benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
 echo -n jpg-
 benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
+
+# OS X only
+# benchmark sips "./sips.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
