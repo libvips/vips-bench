@@ -1,32 +1,26 @@
-/*
+/* compile with:
+
    g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs`
 
-   best run
+   code from Amadan@shacknews, thank you very much!
 
-   $ time ./a.out wtc_tiled_small.tif out.tif
-
-   real	0m0.973s
-   user	0m0.690s
-   sys	0m0.260s
-
-   peak mem, 185mb
  */
 
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
 
 int
 main (int argc, char **argv)
 {
-  Ptr < IplImage > t1;
+  Mat img = imread (argv[1]);
 
-  if (!(t1 = cvLoadImage (argv[1])))
+  if (img.empty ())
     return 1;
-  Mat img (t1);
 
-  Mat crop (img, Rect (100, 100, img.cols - 200, img.rows - 200));
+  Mat crop = Mat (img, Rect (100, 100, img.cols - 200, img.rows - 200));
 
   Mat shrunk;
   resize (crop, shrunk, Size (0, 0), 0.9, 0.9);
@@ -36,8 +30,8 @@ main (int argc, char **argv)
 
   Mat sharp;
   filter2D (shrunk, sharp, -1, kernel, Point (-1, -1), 0, BORDER_REPLICATE);
-  CvMat cvimg = sharp;
-  cvSaveImage (argv[2], &cvimg);
+
+  imwrite (argv[2], sharp);
 
   return 0;
 }
