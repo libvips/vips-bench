@@ -82,27 +82,27 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
-echo -n ppm-
-gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
-benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
+echo -n ppm-
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
+
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
+
+benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
 benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
-
 # still in development
-# benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
+benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
 
 echo -n jpg-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
@@ -147,8 +147,11 @@ benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 gcc -Wall gegl.c `pkg-config gegl-0.2 --cflags --libs` -o gegl
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-# imagescience won't install on my machine, how odd
-# benchmark ./is.rb $tmp/x.tif $tmp/x2.tif
+benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
+
+# octave image load is broken in 15.04, see 
+# https://bugs.launchpad.net/ubuntu/+source/octave/+bug/1372202
+# benchmark ./octave.m $tmp/x.tif $tmp/x2.tif
 
 ./combine.rb *.csv > memtrace.csv
 

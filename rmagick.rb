@@ -3,7 +3,8 @@
 # gem install rmagick
 
 require 'rubygems'
-require 'RMagick'
+require 'rmagick'
+
 include Magick
 
 im = ImageList.new(ARGV[0])
