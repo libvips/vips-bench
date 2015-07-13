@@ -15,6 +15,8 @@ main( int argc, char **argv )
         global = vips_image_new();
         t = (VipsImage **) vips_object_local_array( VIPS_OBJECT( global ), 5 );
 
+	VipsInterpolate *interp = vips_interpolate_new( "bilinear" );
+
         if( !(t[0] = vips_image_new_from_file( argv[1],
                 "access", VIPS_ACCESS_SEQUENTIAL,
                 NULL )) )
@@ -28,12 +30,16 @@ main( int argc, char **argv )
 
         if( vips_extract_area( t[0], &t[2], 
                 100, 100, t[0]->Xsize - 200, t[0]->Ysize - 200, NULL ) ||
-                vips_similarity( t[2], &t[3], "scale", 0.9, NULL ) ||
+                vips_similarity( t[2], &t[3], 
+			"scale", 0.9, 
+			"interpolate", interp, 
+			NULL ) ||
                 vips_conv( t[3], &t[4], t[1], NULL ) ||
                 vips_image_write_to_file( t[4], argv[2], NULL ) )
                 vips_error_exit( NULL ); 
 
         g_object_unref( global );
+        g_object_unref( interp );
 
         return( 0 );
 }
