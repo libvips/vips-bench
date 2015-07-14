@@ -6,6 +6,7 @@ freeimage
 mask*
 opencv
 vips-cc
+ymagine-c
 vips8-cc
 vips-c
 gd

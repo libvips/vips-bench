@@ -88,8 +88,8 @@ benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
-echo -n ppm-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+echo -n ppm-
 benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
@@ -104,8 +104,8 @@ benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 # still in development
 benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
 
-echo -n jpg-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
@@ -135,6 +135,7 @@ benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 #	ymagine.c \
 #	-l yahoo_ymagine \
 #	-o ymagine-c
+#echo -n jpg-
 #benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
@@ -152,11 +153,13 @@ gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
+echo -n jpg-
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gegl.c `pkg-config gegl-0.2 --cflags --libs` -o gegl
+echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
