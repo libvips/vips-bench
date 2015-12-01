@@ -127,20 +127,23 @@ benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
-#YMAGINE=/home/john/ymagine
-#gcc \
-#	-I $YMAGINE/framework/ymagine/jni/include \
-#	-I $YMAGINE/framework/yosal/include \
-#	-L $YMAGINE/out/target/linux-x86_64 \
-#	ymagine.c \
-#	-l yahoo_ymagine \
-#	-o ymagine-c
-#echo -n jpg-
-#benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
+YMAGINE=/home/john/ymagine
+gcc \
+	-I $YMAGINE/framework/ymagine/jni/include \
+	-I $YMAGINE/framework/yosal/include \
+	-L $YMAGINE/out/target/linux-x86_64 \
+	ymagine.c \
+	-l yahoo_ymagine \
+	-o ymagine-c
+echo -n jpg-
+benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
+
+gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
+benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
