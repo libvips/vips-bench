@@ -11,5 +11,4 @@ gmic \
 	-crop 100,100,$crop_width,$crop_height \
 	-resize 90%,90%,1,3,3,1 \
 	"(-1,-1,-1;-1,9,-1;-1,-1,-1)" -convolve[-2] [-1] -keep[-2] \
-	-type uchar \
-	-output $2
+	-output $2,uchar

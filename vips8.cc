@@ -34,9 +34,13 @@ main( int argc, char **argv )
                 -1, -1, -1, -1, 16, -1, -1, -1, -1 );
 	mask.set( "scale", 8 ); 
 
+	VInterpolate inter = VInterpolate::new_from_name( "bilinear" ); 
+
         in.
                 extract_area( 100, 100, in.width() - 200, in.height() - 200 ).
-                similarity( VImage::option()->set( "scale", 0.9 ) ).
+                similarity( VImage::option()->
+			set( "scale", 0.9 )->
+			set( "interpolate", inter ) ).
                 conv( mask ). 
                 write_to_file( argv[2] );
 

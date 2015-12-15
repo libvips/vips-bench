@@ -95,30 +95,30 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
-echo -n ppm-
-gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
-benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+echo -n ppm-
+benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
+
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
+
+benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
 benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
-
 # still in development
-# benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
+benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
 
-echo -n jpg-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
@@ -141,9 +141,25 @@ benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
+# this needs careful config, see
+# https://github.com/jcupitt/vips-bench/issues/4
+YMAGINE=/home/john/ymagine
+gcc \
+	-I $YMAGINE/framework/ymagine/jni/include \
+	-I $YMAGINE/framework/yosal/include \
+	-L $YMAGINE/out/target/linux-x86_64 \
+	ymagine.c \
+	-l yahoo_ymagine \
+	-o ymagine-c
+echo -n jpg-
+benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
+
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
+
+gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
+benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
@@ -156,15 +172,20 @@ gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
+echo -n jpg-
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gegl.c `pkg-config gegl-0.2 --cflags --libs` -o gegl
+echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-# imagescience won't install on my machine, how odd
-# benchmark ./is.rb $tmp/x.tif $tmp/x2.tif
+benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
+
+# octave image load is broken in 15.04, see 
+# https://bugs.launchpad.net/ubuntu/+source/octave/+bug/1372202
+# benchmark ./octave.m $tmp/x.tif $tmp/x2.tif
 
 ./combine.rb *.csv > memtrace.csv
 
