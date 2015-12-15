@@ -53,11 +53,10 @@ main (int argc, char **argv)
                               NULL);
                 
   scale = gegl_node_new_child (gegl,
-                               "operation", "gegl:scale",
+                               "operation", "gegl:scale-ratio",
                                "x", 0.9,
                                "y", 0.9,
-                               "filter", "linear", 
-                               "hard-edges", FALSE, 
+                               "sampler", GEGL_SAMPLER_LINEAR,
                                NULL);
                 
   sharp = gegl_node_new_child (gegl,

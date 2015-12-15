@@ -45,6 +45,3 @@ The peakmem.pl program doesn't seem to be working correctly, investigate.
 
 The Octave test (vips.m) segvs for me on Ubuntu 13.04, try again later. 
 
-why is vips-cc faster than vips-c? vips-c is spending 40ms in startup, but we
-see a speed difference of 100ms ... they must be running different pipelines
-
