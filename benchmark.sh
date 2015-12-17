@@ -141,9 +141,18 @@ benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
+benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
+
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+export VIPS_CONCURRENCY=1
+echo -n 1thread-
+benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
+unset VIPS_CONCURRENCY
+
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
 YMAGINE=/home/john/ymagine
+export LD_LIBRARY_PATH=$YMAGINE/out/target/linux-x86_64:$LD_LIBRARY_PATH
 gcc \
 	-I $YMAGINE/framework/ymagine/jni/include \
 	-I $YMAGINE/framework/yosal/include \
@@ -153,8 +162,6 @@ gcc \
 	-o ymagine-c
 echo -n jpg-
 benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
-
-benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
@@ -177,11 +184,11 @@ benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
-gcc -Wall gegl.c `pkg-config gegl-0.2 --cflags --libs` -o gegl
+benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
+
+gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
-
-benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
 
 # octave image load is broken in 15.04, see 
 # https://bugs.launchpad.net/ubuntu/+source/octave/+bug/1372202
