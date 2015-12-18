@@ -17,6 +17,19 @@ vips copy $tmp/x.tif $tmp/x.jpg
 vips copy $tmp/x.tif $tmp/x.ppm
 vipsheader $tmp/x.tif
 
+# try to portably find the real time a command took to run
+
+real_time() {
+	# capture command output to y, time output to x
+	(time -p $* &> tmp/y) &> tmp/x
+
+	# get just the "real 0.2" line
+	real=($(cat tmp/x | grep real))
+
+	# just the the number
+	return_real_time=${real[1]}
+}
+
 # run a command three times, return the fastest real time
 
 # sleep for two secs between runs to let the system settle -- after a run
@@ -28,11 +41,14 @@ get_time() {
 	cmd=$*
 
 	sleep 2
-	t1=$(/usr/bin/time -f %e $cmd 2>&1) 
+	real_time $cmd
+	t1=$return_real_time
 	sleep 2
-	t2=$(/usr/bin/time -f %e $cmd 2>&1) 
+	real_time $cmd
+	t2=$return_real_time
 	sleep 2
-	t3=$(/usr/bin/time -f %e $cmd 2>&1) 
+	real_time $cmd
+	t3=$return_real_time
 
 	if [[ $t2 < $t1 ]]; then
 		t1=$t2
@@ -40,9 +56,6 @@ get_time() {
 	if [[ $t3 < $t1 ]]; then
 		t1=$t3
 	fi
-
-	# remove any newlines
-	t1=$(echo $t1)
 
 	cmd_time=$t1
 }
@@ -81,6 +94,8 @@ benchmark() {
 rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
+
+benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
@@ -123,24 +138,37 @@ benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
+# OS X only
+# benchmark sips "./sips.sh $tmp/x.tif $tmp/x2.tif"
 
-# this needs careful config, see
-# https://github.com/jcupitt/vips-bench/issues/4
-#YMAGINE=/home/john/ymagine
-#gcc \
-#	-I $YMAGINE/framework/ymagine/jni/include \
-#	-I $YMAGINE/framework/yosal/include \
-#	-L $YMAGINE/out/target/linux-x86_64 \
-#	ymagine.c \
-#	-l yahoo_ymagine \
-#	-o ymagine-c
-#echo -n jpg-
-#benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
+benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+export VIPS_CONCURRENCY=1
+echo -n 1thread-
+benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
+unset VIPS_CONCURRENCY
+
+# this needs careful config, see
+# https://github.com/jcupitt/vips-bench/issues/4
+YMAGINE=/home/john/ymagine
+export LD_LIBRARY_PATH=$YMAGINE/out/target/linux-x86_64:$LD_LIBRARY_PATH
+gcc \
+	-I $YMAGINE/framework/ymagine/jni/include \
+	-I $YMAGINE/framework/yosal/include \
+	-L $YMAGINE/out/target/linux-x86_64 \
+	ymagine.c \
+	-l yahoo_ymagine \
+	-o ymagine-c
+echo -n jpg-
+benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
+
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
+
+gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
+benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
@@ -158,14 +186,13 @@ benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
+benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
+
 gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
-
-# octave image load is broken in 15.04, see 
-# https://bugs.launchpad.net/ubuntu/+source/octave/+bug/1372202
+# octave image load is broken in 15.10
 # benchmark ./octave.m $tmp/x.tif $tmp/x2.tif
 
 ./combine.rb *.csv > memtrace.csv
