@@ -95,6 +95,8 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
+benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
+
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
@@ -190,8 +192,7 @@ gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-# octave image load is broken in 15.04, see 
-# https://bugs.launchpad.net/ubuntu/+source/octave/+bug/1372202
+# octave image load is broken in 15.10
 # benchmark ./octave.m $tmp/x.tif $tmp/x2.tif
 
 ./combine.rb *.csv > memtrace.csv
