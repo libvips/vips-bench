@@ -158,7 +158,7 @@ benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
-gcc -Wall gegl.c `pkg-config gegl-0.2 --cflags --libs` -o gegl
+gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
