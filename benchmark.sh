@@ -99,6 +99,8 @@ benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
+echo -n strip-
+benchmark vips-c "./vips-c $tmp/x_strip.tif $tmp/x2.tif"
 
 g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
