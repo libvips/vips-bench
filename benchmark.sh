@@ -192,6 +192,9 @@ gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
+echo -n tif-
+benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
+
 # octave image load is broken in 15.10
 # benchmark ./octave.m $tmp/x.tif $tmp/x2.tif
 
