@@ -118,7 +118,6 @@ benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 
-# still in development
 benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
@@ -191,6 +190,10 @@ benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
+echo -n tiff-
+benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
+echo -n strip-tiff-
+benchmark gegl "./gegl $tmp/x_strip.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
