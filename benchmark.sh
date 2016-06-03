@@ -64,10 +64,11 @@ get_time() {
 get_mem() {
 	name=$1
 	cmd=$2
+	user=$(whoami)
 
 	rm -f $tmp/vipsbench.lock
 	(while [ ! -f $tmp/vipsbench.lock ]; do 
-		ps u
+		ps u -u $user 
 		sleep 0.01
 	 done | ./parse-ps.rb "$name" > "$name.csv") &
 	$cmd 
@@ -146,6 +147,9 @@ benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
+echo -n jpg-
+benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
+
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 export VIPS_CONCURRENCY=1
 echo -n 1thread-
@@ -197,8 +201,7 @@ benchmark gegl "./gegl $tmp/x_strip.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-# octave image load is broken in 15.10
-# benchmark ./octave.m $tmp/x.tif $tmp/x2.tif
+benchmark octave "./octave.m $tmp/x.tif $tmp/x2.tif"
 
 ./combine.rb *.csv > memtrace.csv
 

@@ -1,6 +1,7 @@
 #!/usr/bin/octave -qf
 
-% this segvs for me on (amost) any image, strange
+% we see some annoying warnings from GM without this
+warning("off")
 
 pkg load image
 
