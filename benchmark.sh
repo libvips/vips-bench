@@ -200,6 +200,8 @@ echo -n strip-tiff-
 benchmark gegl "./gegl $tmp/x_strip.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
+echo -n tif-
+benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
 
 benchmark octave "./octave.m $tmp/x.tif $tmp/x2.tif"
 
