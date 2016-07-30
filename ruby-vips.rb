@@ -1,20 +1,16 @@
 #!/usr/bin/ruby
 
-require 'rubygems'
 require 'vips'
-include VIPS
 
-im = Image.new(ARGV[0])
+im = Vips::Image.new_from_file ARGV[0]
 
-im = im.extract_area(100, 100, im.x_size - 200, im.y_size - 200)
-im = im.affinei(:bilinear, 0.9, 0, 0, 0.9, 0, 0)
-mask = [
+im = im.crop 100, 100, im.width - 200, im.height - 200
+im = im.similarity :scale => 0.9
+mask = Vips::Image.new_from_array [
 	[-1, -1,  -1], 
 	[-1,  16, -1],
-	[-1, -1,  -1]
-]
-m = VIPS::Mask.new mask, 8, 0
-im = im.conv(m)
+	[-1, -1,  -1]], 8
+im = im.conv(mask)
 
-im.write(ARGV[1])
+im.write_to_file ARGV[1]
 

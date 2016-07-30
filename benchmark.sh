@@ -112,14 +112,14 @@ benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
+benchmark vips8-gegl.py "./vips8-gegl.py $tmp/x.tif $tmp/x2.tif"
 
 g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
 benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark ruby-vips8 "./ruby-vips8.rb $tmp/x.tif $tmp/x2.tif"
+benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n jpg-
