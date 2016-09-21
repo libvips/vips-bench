@@ -6,6 +6,9 @@ interpolation, sharpen with a 3x3 convolution and save again. It's a trivial
 test but it does give some idea of the speed and memory behaviour of these
 libraries (and it's also quite fun to compare the code). 
 
+Bilinear interpolation is poor quality and no one would use it, but it is
+available everywhere. 
+
 # Running the test
 
 There's a driver program -- run
@@ -23,12 +26,7 @@ can do this by running
 		python-imaging netpbm libvips nip2 libfreeimage-dev \
 		exactimage
 
-	gem install rmagick ruby-vips
-
-There's stuff here to test imagescience as well, but it's not installing for 
-me for some reason. It might work for you:
-
-	gem install image_science
+	gem install rmagick ruby-vips image_science
 
 You may need more recent versions of some packages. The netpbm in Ubuntu is
 very old and installing from the website is a good idea. Ubuntu libvips tends

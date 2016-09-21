@@ -127,34 +127,33 @@ benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
-
-g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
-benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
-
 echo -n ppm-
 benchmark gm "./gm.sh $tmp/x.ppm $tmp/x2.ppm"
 
 benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
+benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
+
 echo -n jpg-
 benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
+
+benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 
 # OS X only
 # benchmark sips "./sips.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
 
-benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
-
-echo -n jpg-
-benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
+benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 export VIPS_CONCURRENCY=1
 echo -n 1thread-
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 unset VIPS_CONCURRENCY
+
+echo -n jpg-
+benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
 
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
@@ -170,28 +169,29 @@ gcc \
 echo -n jpg-
 benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
 
+g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
+benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
+
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
 
 gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
 benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 
-benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
-
 # benchmark pil "./pil.py $tmp/x.tif $tmp/x2.tif"
 benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
-
 gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
+
+benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
+
+benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
 echo -n jpg-
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
-
-benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n tiff-
@@ -200,8 +200,6 @@ echo -n strip-tiff-
 benchmark gegl "./gegl $tmp/x_strip.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
-echo -n tif-
-benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
 
 benchmark octave "./octave.m $tmp/x.tif $tmp/x2.tif"
 
