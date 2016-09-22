@@ -1,0 +1,6 @@
+{
+    "require": {
+        "jcupitt/vips" : "@dev"
+    }
+
+}

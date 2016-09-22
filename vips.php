@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-include 'Image.php';
+require __DIR__ . '/vendor/autoload.php';
 
-use JCupitt\Vips;
+use Jcupitt\Vips;
 
 $im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
 

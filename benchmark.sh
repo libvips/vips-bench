@@ -17,6 +17,9 @@ vips copy $tmp/x.tif $tmp/x.jpg
 vips copy $tmp/x.tif $tmp/x.ppm
 vipsheader $tmp/x.tif
 
+# needed for vips.php below
+composer install
+
 # try to portably find the real time a command took to run
 
 real_time() {
@@ -109,6 +112,8 @@ benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n ppm-
 benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
+
+benchmark vips.php "./vips.php $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
