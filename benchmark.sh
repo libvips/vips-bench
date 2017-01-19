@@ -190,6 +190,8 @@ benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
 
 benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
 
+benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
+
 benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
