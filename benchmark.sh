@@ -103,6 +103,7 @@ benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
+
 echo -n strip-
 benchmark vips-c "./vips-c $tmp/x_strip.tif $tmp/x2.tif"
 
@@ -137,8 +138,6 @@ benchmark gm "./gm.sh $tmp/x.ppm $tmp/x2.ppm"
 
 benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
-
 echo -n jpg-
 benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
 
@@ -157,8 +156,7 @@ echo -n 1thread-
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 unset VIPS_CONCURRENCY
 
-echo -n jpg-
-benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
+benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
 
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
@@ -177,13 +175,15 @@ benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
 g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
 benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
 
+benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
+
 benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
+
+echo -n jpg-
+benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
 
 gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
 benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
-
-# benchmark pil "./pil.py $tmp/x.tif $tmp/x2.tif"
-benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
 
 gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
@@ -199,6 +199,8 @@ echo -n jpg-
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
+
+benchmark imagej "imagej -x 1000 -i tmp/x_strip.tif -b bench.ijm"
 
 gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n tiff-
