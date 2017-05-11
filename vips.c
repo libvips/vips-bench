@@ -17,9 +17,7 @@ main( int argc, char **argv )
 
 	VipsInterpolate *interp = vips_interpolate_new( "bilinear" );
 
-        if( !(t[0] = vips_image_new_from_file( argv[1],
-                "access", VIPS_ACCESS_SEQUENTIAL,
-                NULL )) )
+        if( !(t[0] = vips_image_new_from_file( argv[1], NULL )) )
                 vips_error_exit( NULL );
 
         t[1] = vips_image_new_matrixv( 3, 3, 
