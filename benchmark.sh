@@ -156,6 +156,12 @@ echo -n 1thread-
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 unset VIPS_CONCURRENCY
 
+# tried pillow-simd with
+# CC="cc -mavx2" pip install --user --force-reinstall --ignore-installed \
+# 	--no-binary :all: pillow-simd
+# but no faster 
+# tried with resize LANCZOS, no difference
+# presumably most time is being spent elsewhere 
 benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
 
 # this needs careful config, see
