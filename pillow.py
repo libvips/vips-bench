@@ -18,7 +18,11 @@ im = im.crop((100, 100, im.size[0] - 100, im.size[1] - 100))
 # so this is rather unfair. Use NEAREST instead, it gets closest to what
 # everyone else is doing
 
-im = im.resize((int (im.size[0] * 0.9), int (im.size[1] * 0.9)), Image.NEAREST)
+# pillow-simd reduces the LANCZOS time down to only 10% more than NEAREST
+
+im = im.resize((int (im.size[0] * 0.9), int (im.size[1] * 0.9)), 
+#               Image.LANCZOS)
+               Image.NEAREST)
 
 # sharpen
 filter = ImageFilter.Kernel((3, 3),
