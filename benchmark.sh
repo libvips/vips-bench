@@ -33,7 +33,7 @@ real_time() {
 	return_real_time=${real[1]}
 }
 
-# run a command three times, return the fastest real time
+# run a command several times, return the fastest real time
 
 # sleep for two secs between runs to let the system settle -- after a run
 # there's a short period of disc chatter we want to avoid
@@ -43,24 +43,16 @@ real_time() {
 get_time() {
 	cmd=$*
 
-	sleep 2
-	real_time $cmd
-	t1=$return_real_time
-	sleep 2
-	real_time $cmd
-	t2=$return_real_time
-	sleep 2
-	real_time $cmd
-	t3=$return_real_time
+	times=()
+	for i in {1..5}; do
+		sleep 2
+		real_time $cmd
+		times+=($return_real_time)
+	done
 
-	if [[ $t2 < $t1 ]]; then
-		t1=$t2
-	fi
-	if [[ $t3 < $t1 ]]; then
-		t1=$t3
-	fi
-
-	cmd_time=$t1
+	IFS=$'\n' times=($(sort -g <<<"${times[*]}"))
+	unset IFS
+	cmd_time=$times
 }
 
 # run a command and get a trace of memuse in a csv file
