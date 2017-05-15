@@ -17,9 +17,7 @@ main( int argc, char **argv )
 
 	VipsInterpolate *interp = vips_interpolate_new( "bilinear" );
 
-        if( !(t[0] = vips_image_new_from_file( argv[1],
-                "access", VIPS_ACCESS_SEQUENTIAL,
-                NULL )) )
+        if( !(t[0] = vips_image_new_from_file( argv[1], NULL )) )
                 vips_error_exit( NULL );
 
         t[1] = vips_image_new_matrixv( 3, 3, 
@@ -30,6 +28,13 @@ main( int argc, char **argv )
 
         if( vips_extract_area( t[0], &t[2], 
                 100, 100, t[0]->Xsize - 200, t[0]->Ysize - 200, NULL ) ||
+			/* lanczos2 version, handy for testing against pillow
+		vips_reduce( t[2], &t[3], 1.0 / 0.9, 1.0 / 0.9, 
+			"kernel", VIPS_KERNEL_LANCZOS2,
+			NULL ) ||
+			 */
+			/* bilinear, matching the other progs here
+			 */
                 vips_similarity( t[2], &t[3], 
 			"scale", 0.9, 
 			"interpolate", interp, 
