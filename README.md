@@ -34,12 +34,11 @@ to lag as well.
 
 # Results
 
-The
-[speed and memory use page](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) on the libvips website has a table of results. 
+The [speed and memory use
+page](https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use) on the
+libvips website has a table of results.
 
 # TODO
 
 The peakmem.pl program doesn't seem to be working correctly, investigate.
-
-The Octave test (vips.m) segvs for me on Ubuntu 13.04, try again later. 
 
