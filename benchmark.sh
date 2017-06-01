@@ -20,8 +20,7 @@ vipsheader $tmp/x.tif
 # needed for vips.php below
 composer install
 
-# try to portably find the real time a command took to run
-
+# try to find the real time a command took to run
 real_time() {
 	# capture command output to y, time output to x
 	(time -p $* &> tmp/y) &> tmp/x
@@ -77,12 +76,9 @@ benchmark() {
 	name=$1
 	cmd=$2
 
-	echo -n $name 
 	get_time $cmd
-	echo -n , $cmd_time
 	get_mem "$name" "$cmd"
-	echo -n , $cmd_mem 
-	echo 
+	echo $name, $cmd_time, $cmd_mem 
 
 	echo "time, $cmd_time, " >> "$name.csv"
 }
@@ -105,6 +101,8 @@ benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n ppm-
 benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
+
+benchmark vips.lua "./vips.lua $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.php "./vips.php $tmp/x.tif $tmp/x2.tif"
 
