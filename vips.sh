@@ -17,6 +17,6 @@ cat > mask.con <<EOF
 -1 16 -1
 -1 -1 -1
 EOF
-vips conv t2.v $2 mask.con
+vips conv t2.v $2 mask.con --precision integer
 
 rm t1.v t2.v

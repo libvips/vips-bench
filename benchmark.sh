@@ -95,9 +95,6 @@ benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 echo -n strip-
 benchmark vips-c "./vips-c $tmp/x_strip.tif $tmp/x2.tif"
 
-g++ vips.cc `pkg-config vipsCC --cflags --libs` -o vips-cc
-benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n ppm-
 benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
@@ -105,8 +102,6 @@ benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
 benchmark vips.lua "./vips.lua $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.php "./vips.php $tmp/x.tif $tmp/x2.tif"
-
-benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips8-gegl.py "./vips8-gegl.py $tmp/x.tif $tmp/x2.tif"
 

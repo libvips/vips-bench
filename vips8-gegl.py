@@ -17,7 +17,7 @@ im = im.similarity(scale = 0.9,
 mask = Vips.Image.new_from_array([[-1, -1,  -1], 
                                   [-1,  16, -1], 
                                   [-1, -1,  -1]], scale = 8)
-im = im.conv(mask)
+im = im.conv(mask, precision = "integer")
 
 im = im.colourspace("srgb")
 im = im.extract_band(0, n = 3)

@@ -39,7 +39,9 @@ main( int argc, char **argv )
 			"scale", 0.9, 
 			"interpolate", interp, 
 			NULL ) ||
-                vips_conv( t[3], &t[4], t[1], NULL ) ||
+                vips_conv( t[3], &t[4], t[1], 
+			"precision", VIPS_PRECISION_INTEGER,
+			NULL ) ||
                 vips_image_write_to_file( t[4], argv[2], NULL ) )
                 vips_error_exit( NULL ); 
 

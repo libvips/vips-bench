@@ -41,7 +41,8 @@ main( int argc, char **argv )
                 similarity( VImage::option()->
 			set( "scale", 0.9 )->
 			set( "interpolate", inter ) ).
-                conv( mask ). 
+                conv( mask, VImage::option()->
+			set( "precision", VIPS_PRECISION_INTEGER )). 
                 write_to_file( argv[2] );
 
         return( 0 );
