@@ -110,6 +110,8 @@ benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
 
+benchmark pyvips2.py "./pyvips2.py $tmp/x.tif $tmp/x2.tif"
+
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
