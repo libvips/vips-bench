@@ -89,12 +89,6 @@ echo "program, time (s), peak memory (MB)"
 
 benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
 
-benchmark pyvips2.py "./pyvips2.py $tmp/x.tif $tmp/x2.tif"
-
-benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
-
-benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
@@ -114,7 +108,7 @@ benchmark vips8-gegl.py "./vips8-gegl.py $tmp/x.tif $tmp/x2.tif"
 g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
 benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
 
-benchmark vips8.py "./vips8.py $tmp/x.tif $tmp/x2.tif"
+benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
 
 benchmark pyvips2.py "./pyvips2.py $tmp/x.tif $tmp/x2.tif"
 
