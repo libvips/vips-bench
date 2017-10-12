@@ -105,7 +105,7 @@ benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
 
-benchmark pyvips-bench.py "./pyvips-bench.py $tmp/x.tif $tmp/x2.tif"
+benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
