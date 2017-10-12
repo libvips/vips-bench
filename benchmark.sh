@@ -87,8 +87,6 @@ echo "program, time (s), peak memory (MB)"
 
 benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
 
-benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
-
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
