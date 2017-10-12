@@ -9,10 +9,8 @@ mkdir $tmp
 
 echo building test image ...
 vips colourspace sample2.v $tmp/t1.v srgb
-vips colourspace sample2.v $tmp/t1.v srgb
 vips replicate $tmp/t1.v $tmp/t2.v 20 15
-vips extract_area $tmp/t2.v $tmp/x.tif[tile] 0 0 5000 5000
-vips copy $tmp/x.tif $tmp/x_strip.tif
+vips extract_area $tmp/t2.v $tmp/x.tif 0 0 5000 5000
 vips copy $tmp/x.tif $tmp/x.jpg
 vips copy $tmp/x.tif $tmp/x.ppm
 vipsheader $tmp/x.tif
@@ -28,7 +26,7 @@ real_time() {
 	# get just the "real 0.2" line
 	real=($(cat tmp/x | grep real))
 
-	# just the the number
+	# and just the number
 	return_real_time=${real[1]}
 }
 
@@ -37,7 +35,7 @@ real_time() {
 # sleep for two secs between runs to let the system settle -- after a run
 # there's a short period of disc chatter we want to avoid
 
-# check that services like tracker are not running
+# you should check that services like tracker are not running
 
 get_time() {
 	cmd=$*
@@ -89,11 +87,10 @@ echo "program, time (s), peak memory (MB)"
 
 benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
 
+benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
+
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
-
-echo -n strip-
-benchmark vips-c "./vips-c $tmp/x_strip.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n ppm-
@@ -103,20 +100,22 @@ benchmark vips.lua "./vips.lua $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.php "./vips.php $tmp/x.tif $tmp/x2.tif"
 
-benchmark vips8-gegl.py "./vips8-gegl.py $tmp/x.tif $tmp/x2.tif"
+benchmark vips-gegl.py "./vips-gegl.py $tmp/x.tif $tmp/x2.tif"
 
-g++ vips8.cc `pkg-config vips-cpp --cflags --libs` -o vips8-cc
-benchmark vips8-cc "./vips8-cc $tmp/x.tif $tmp/x2.tif"
+g++ vips.cc `pkg-config vips-cpp --cflags --libs` -o vips-cc
+benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
 
-benchmark pyvips2.py "./pyvips2.py $tmp/x.tif $tmp/x2.tif"
+benchmark pyvips-bench.py "./pyvips-bench.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
+
+benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
@@ -133,7 +132,7 @@ benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 # OS X only
 # benchmark sips "./sips.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark pnm "./netpbm.sh $tmp/x_strip.tif $tmp/x2.tif"
+benchmark pnm "./netpbm.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
@@ -142,13 +141,6 @@ export VIPS_CONCURRENCY=1
 echo -n 1thread-
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 unset VIPS_CONCURRENCY
-
-# tried pillow-simd with
-# CC="cc -O3 -march=native" pip install --user --force-reinstall \
-#	--ignore-installed --no-binary :all: pillow-simd
-# but no faster ... presumably most time is being spent elsewhere 
-# tried with resize LANCZOS, pillow-simd helps a lot
-benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
 
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
@@ -169,7 +161,7 @@ benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark econvert "./ei.sh $tmp/x_strip.tif $tmp/x2.tif"
+benchmark econvert "./ei.sh $tmp/x.tif $tmp/x2.tif"
 
 echo -n jpg-
 benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
@@ -192,13 +184,12 @@ benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark imagej "imagej -x 1000 -i tmp/x_strip.tif -b bench.ijm"
+benchmark imagej "imagej -x 1000 -i tmp/x.tif -b bench.ijm"
 
 gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
-echo -n tiff-
-benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
-echo -n strip-tiff-
-benchmark gegl "./gegl $tmp/x_strip.tif $tmp/x2.tif"
+# gegl-0.3 doesn't have tiff support built in
+# echo -n tiff-
+# benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 

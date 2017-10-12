@@ -9,7 +9,7 @@ height=$((height - 200))
 # set -x
 
 vips crop $1 t1.v 100 100 $width $height
-vips similarity t1.v t2.v --scale 0.9 --interpolate bilinear
+vips reduce t1.v t2.v 1.111 1.111 --kernel linear
 
 cat > mask.con <<EOF
 3 3 8 0

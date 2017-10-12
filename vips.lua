@@ -2,7 +2,7 @@
 
 local vips = require("vips")
 
-image = vips.Image.new_from_file(arg[1])
+image = vips.Image.new_from_file(arg[1], {access = "sequential"})
 
 image = image:crop(100, 100, image:width() - 200, image:height() - 200)
 

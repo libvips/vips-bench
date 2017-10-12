@@ -1,5 +1,5 @@
 // compile with
-// g++ vips8.cc `pkg-config vips-cpp --cflags --libs`
+// g++ vips.cc `pkg-config vips-cpp --cflags --libs`
 
 #include <vips/vips8>
 
@@ -28,19 +28,17 @@ main( int argc, char **argv )
 	}
 	g_option_context_free( context );
 
-        VImage in = VImage::new_from_file( argv[1] );
+        VImage in = VImage::new_from_file( argv[1], 
+		VImage::option()-> set( "access", VIPS_ACCESS_SEQUENTIAL ));
 
         VImage mask = VImage::new_matrixv( 3, 3, 
                 -1, -1, -1, -1, 16, -1, -1, -1, -1 );
 	mask.set( "scale", 8 ); 
 
-	VInterpolate inter = VInterpolate::new_from_name( "bilinear" ); 
-
         in.
                 extract_area( 100, 100, in.width() - 200, in.height() - 200 ).
-                similarity( VImage::option()->
-			set( "scale", 0.9 )->
-			set( "interpolate", inter ) ).
+		reduce( 1.0 / 0.9, 1.0 / 0.9, VImage::option()->
+			set( "kernel", VIPS_KERNEL_LINEAR ) ).
                 conv( mask, VImage::option()->
 			set( "precision", VIPS_PRECISION_INTEGER )). 
                 write_to_file( argv[2] );
