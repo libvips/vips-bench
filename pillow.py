@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
 import sys
-from PIL import Image, ImageFilter, PILLOW_VERSION
+from PIL import Image, ImageFilter, __version__
 
 # just to confirm we are getting the right version
-# print 'pillow.py: PILLOW_VERSION =', PILLOW_VERSION
+# print 'pillow.py: __version__ =', __version__
 
 im = Image.open(sys.argv[1])
 width, height = im.size
