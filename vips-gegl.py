@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+# use pyvips, but try to match the exact processing that the gegl code is
+# doing, so everything is float, RGBA, and in linear light
+
 import sys
 import pyvips
 

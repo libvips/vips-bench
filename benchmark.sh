@@ -10,9 +10,10 @@ mkdir $tmp
 echo building test image ...
 vips colourspace sample2.v $tmp/t1.v srgb
 vips replicate $tmp/t1.v $tmp/t2.v 20 15
-vips extract_area $tmp/t2.v $tmp/x.tif 0 0 5000 5000
+vips extract_area $tmp/t2.v $tmp/x.tif[tile] 0 0 5000 5000
 vips copy $tmp/x.tif $tmp/x.jpg
 vips copy $tmp/x.tif $tmp/x.ppm
+vips copy $tmp/x.tif $tmp/x-strip.tif
 vipsheader $tmp/x.tif
 
 # needed for vips.php below
@@ -113,7 +114,8 @@ gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
+# pillow hates tiled tiff
+benchmark pillow "./pillow.py $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
@@ -130,7 +132,8 @@ benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 # OS X only
 # benchmark sips "./sips.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark pnm "./netpbm.sh $tmp/x.tif $tmp/x2.tif"
+# pnm hates tiled tiff
+benchmark pnm "./netpbm.sh $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
@@ -143,23 +146,25 @@ unset VIPS_CONCURRENCY
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
 YMAGINE=/home/john/ymagine
-export LD_LIBRARY_PATH=$YMAGINE/out/target/linux-x86_64:$LD_LIBRARY_PATH
-gcc \
-	-I $YMAGINE/framework/ymagine/jni/include \
-	-I $YMAGINE/framework/yosal/include \
-	-L $YMAGINE/out/target/linux-x86_64 \
-	ymagine.c \
-	-l yahoo_ymagine \
-	-o ymagine-c
-echo -n jpg-
-benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
+if [ -d $YMAGINE ]; then
+  export LD_LIBRARY_PATH=$YMAGINE/out/target/linux-x86_64:$LD_LIBRARY_PATH
+  gcc \
+    -I $YMAGINE/framework/ymagine/jni/include \
+    -I $YMAGINE/framework/yosal/include \
+    -L $YMAGINE/out/target/linux-x86_64 \
+    ymagine.c \
+    -l yahoo_ymagine \
+    -o ymagine-c
+  echo -n jpg-
+  benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
+fi
 
 g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
 benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark econvert "./ei.sh $tmp/x.tif $tmp/x2.tif"
+benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
 
 echo -n jpg-
 benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
@@ -168,9 +173,9 @@ gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
 benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 
 gcc freeimage.c -lfreeimage -o freeimage
-benchmark freeimage "./freeimage $tmp/x.tif $tmp/x2.tif"
+benchmark freeimage "./freeimage $tmp/x-strip.tif $tmp/x2.tif"
 
-benchmark is "./is.rb $tmp/x.tif $tmp/x2.tif"
+benchmark is "./is.rb $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
 
@@ -182,7 +187,7 @@ benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark imagej "imagej -x 1000 -i tmp/x.tif -b bench.ijm"
+benchmark imagej "imagej -x 1000 -i $tmp/x-strip.tif -b bench.ijm"
 
 gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 # gegl-0.3 doesn't have tiff support built in
