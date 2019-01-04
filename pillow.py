@@ -4,7 +4,7 @@ import sys
 from PIL import Image, ImageFilter, __version__
 
 # just to confirm we are getting the right version
-# print 'pillow.py: __version__ =', __version__
+print 'pillow.py: __version__ =', __version__
 
 im = Image.open(sys.argv[1])
 width, height = im.size
