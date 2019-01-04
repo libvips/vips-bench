@@ -7,12 +7,14 @@ from PIL import Image, ImageFilter, PILLOW_VERSION
 # print 'pillow.py: PILLOW_VERSION =', PILLOW_VERSION
 
 im = Image.open(sys.argv[1])
+width, height = im.size
 
 # Crop 100 pixels off all edges.
-im = im.crop((100, 100, im.width - 100, im.height - 100))
+im = im.crop((100, 100, width - 100, height - 100))
 
 # Shrink by 10%
-im = im.resize((int(im.width * 0.9), int(im.height * 0.9)), Image.BILINEAR)
+width, height = im.size
+im = im.resize((int(width * 0.9), int(height * 0.9)), Image.BILINEAR)
 
 # sharpen
 filter = ImageFilter.Kernel((3, 3),

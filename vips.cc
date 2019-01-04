@@ -8,25 +8,12 @@ using namespace vips;
 int 
 main( int argc, char **argv )
 {
-	GOptionContext *context;
 	VipsImage *global;
 
 	GError *error = NULL;
 
 	if( VIPS_INIT( argv[0] ) )
 		return( -1 );
-
-	context = g_option_context_new( " - VIPS benchmark program" );
-	g_option_context_add_group( context, vips_get_option_group() );
-	if( !g_option_context_parse( context, &argc, &argv, &error ) ) {
-		if( error ) {
-			fprintf( stderr, "%s\n", error->message );
-			g_error_free( error );
-		}
-
-		vips_error_exit( NULL );
-	}
-	g_option_context_free( context );
 
         VImage in = VImage::new_from_file( argv[1], 
 		VImage::option()-> set( "access", VIPS_ACCESS_SEQUENTIAL ));
