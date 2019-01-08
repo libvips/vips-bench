@@ -5,7 +5,7 @@ require 'vips'
 im = Vips::Image.new_from_file ARGV[0]
 
 im = im.crop 100, 100, im.width - 200, im.height - 200
-im = im.similarity scale: 0.9
+im = im.reduce 1.0 / 0.9, 1.0 / 0.9, kernel: :linear
 mask = Vips::Image.new_from_array [
 	[-1, -1,  -1], 
 	[-1,  16, -1],

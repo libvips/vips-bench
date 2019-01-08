@@ -19,4 +19,3 @@ $im->convolveImage($kernel);
 $im->writeImage($argv[2]);
 
 $im->destroy();
-?>

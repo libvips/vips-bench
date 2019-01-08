@@ -18,5 +18,3 @@ $mask = Vips\Image::newFromArray(
 $im = $im->conv($mask, ["precision" => "integer"]);
 
 $im->writeToFile($argv[2]);
-
-?>

@@ -182,6 +182,8 @@ gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
 echo -n jpg-
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
+benchmark imagick "./imagick.php $tmp/x.tif $tmp/x2.tif"
+
 benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
 
 benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
@@ -195,7 +197,7 @@ gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark scikit "./scikit.py $tmp/x.tif $tmp/x2.tif"
+benchmark scikit "./scikit.py $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark octave "./octave.m $tmp/x.tif $tmp/x2.tif"
 
