@@ -15,7 +15,7 @@ im = misc.imresize(im, 0.9, interp='bilinear')
 ker = (1.0 / 8.0) * np.array([[-1, -1,  -1], 
                               [-1,  16, -1], 
                               [-1, -1,  -1]])
-im = ndimage.convolve(im, [ker, ker, ker])
+im = ndimage.convolve(im, bands * [ker])
 
 # save via PIL is slightly quicker
 out = Image.fromarray(im)
