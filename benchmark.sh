@@ -99,12 +99,8 @@ benchmark vips.lua "./vips.lua $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.php "./vips.php $tmp/x.tif $tmp/x2.tif"
 
-benchmark vips-gegl.py "./vips-gegl.py $tmp/x.tif $tmp/x2.tif"
-
 g++ vips.cc `pkg-config vips-cpp --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
-
-benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
@@ -117,6 +113,10 @@ benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
+
+benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
+
+benchmark vips-gegl.py "./vips-gegl.py $tmp/x.tif $tmp/x2.tif"
 
 echo -n ppm-
 benchmark gm "./gm.sh $tmp/x.ppm $tmp/x2.ppm"
@@ -158,9 +158,6 @@ if [ -d $YMAGINE ]; then
   benchmark ymagine-c "./ymagine-c $tmp/x.jpg $tmp/x2.jpg"
 fi
 
-g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
-benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
-
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
@@ -168,23 +165,26 @@ benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
 
+g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
+benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
+
 gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
 benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 
 gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x-strip.tif $tmp/x2.tif"
 
+benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
+
 benchmark is "./is.rb $tmp/x-strip.tif $tmp/x2.tif"
-
-benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
-
-benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
 echo -n jpg-
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
+benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
+
+benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark imagej "imagej -x 1000 -i $tmp/x-strip.tif -b bench.ijm"
 
