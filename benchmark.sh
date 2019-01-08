@@ -195,6 +195,8 @@ gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
+benchmark scikit "./scikit.py $tmp/x.tif $tmp/x2.tif"
+
 benchmark octave "./octave.m $tmp/x.tif $tmp/x2.tif"
 
 ./combine.rb *.csv > memtrace.csv
