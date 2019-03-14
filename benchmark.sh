@@ -110,7 +110,7 @@ gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark pillow "./pillow.py $tmp/x.tif $tmp/x2.tif"
+benchmark pillow "./pillow.py $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
