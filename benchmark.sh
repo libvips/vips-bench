@@ -50,6 +50,7 @@ get_time() {
 
 	IFS=$'\n' times=($(sort -g <<<"${times[*]}"))
 	unset IFS
+
 	cmd_time=$times
 }
 
@@ -160,7 +161,7 @@ fi
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark wand.py "./wand.py $tmp/x.tif $tmp/x2.tif"
+benchmark imwand.py "./imwand.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
 
@@ -192,13 +193,15 @@ benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark imagej "imagej -x 1000 -i $tmp/x-strip.tif -b bench.ijm"
 
-gcc -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs` -o gegl
-# gegl-0.3 doesn't have tiff support built in
+gcc -Wall gegl.c `pkg-config gegl-0.4 --cflags --libs` -o gegl
+# gegl-0.4 doesn't have tiff support built in
 # echo -n tiff-
 # benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
+# this fails with an assert() error on ubuntu 19.04
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
+# this has stopped working and needs fixing
 benchmark scikit "./scikit.py $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark octave "./octave.m $tmp/x.tif $tmp/x2.tif"

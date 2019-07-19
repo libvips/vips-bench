@@ -1,6 +1,6 @@
 /* compile with
  
-   gcc -g -Wall gegl.c `pkg-config gegl-0.3 --cflags --libs`
+   gcc -g -Wall gegl.c `pkg-config gegl-0.4 --cflags --libs`
 
  */
 
