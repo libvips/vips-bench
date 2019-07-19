@@ -160,6 +160,8 @@ fi
 
 benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
+benchmark wand.py "./wand.py $tmp/x.tif $tmp/x2.tif"
+
 benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
 
 echo -n jpg-
