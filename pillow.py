@@ -1,10 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys
 from PIL import Image, ImageFilter, __version__
 
+Image.MAX_IMAGE_PIXELS = None
+
 # just to confirm we are getting the right version
-print 'pillow.py: __version__ =', __version__
+print(f'pillow.py: __version__ = {__version__}')
 
 im = Image.open(sys.argv[1])
 width, height = im.size

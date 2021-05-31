@@ -9,8 +9,9 @@ mkdir $tmp
 
 echo building test image ...
 vips colourspace sample2.v $tmp/t1.v srgb
-vips replicate $tmp/t1.v $tmp/t2.v 20 15
-vips extract_area $tmp/t2.v $tmp/x.tif[tile] 0 0 5000 5000
+#vips replicate $tmp/t1.v $tmp/t2.v 20 15
+vips replicate $tmp/t1.v $tmp/t2.v 40 30
+vips extract_area $tmp/t2.v $tmp/x.tif[tile] 0 0 10000 10000
 vips copy $tmp/x.tif $tmp/x.jpg
 vips copy $tmp/x.tif $tmp/x.ppm
 vips copy $tmp/x.tif $tmp/x-strip.tif
@@ -87,14 +88,16 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
-benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
-
-gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
-benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
+export VIPS_CONCURRENCY=16
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n ppm-
 benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
+
+benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
+
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.lua "./vips.lua $tmp/x.tif $tmp/x2.tif"
 
@@ -107,6 +110,14 @@ benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
+benchmark vips-gegl.py "./vips-gegl.py $tmp/x.tif $tmp/x2.tif"
+
+gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
+export VIPS_CONCURRENCY=1
+echo -n 1thread-
+benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
+unset VIPS_CONCURRENCY
+
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
@@ -115,9 +126,8 @@ benchmark pillow "./pillow.py $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
-benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
-
-benchmark vips-gegl.py "./vips-gegl.py $tmp/x.tif $tmp/x2.tif"
+# sadly bitrotted in the shifting sands of node 
+# benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
 
 echo -n ppm-
 benchmark gm "./gm.sh $tmp/x.ppm $tmp/x2.ppm"
@@ -136,12 +146,6 @@ benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 benchmark pnm "./netpbm.sh $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
-
-gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
-export VIPS_CONCURRENCY=1
-echo -n 1thread-
-benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
-unset VIPS_CONCURRENCY
 
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
@@ -163,13 +167,17 @@ benchmark convert "./im.sh $tmp/x.tif $tmp/x2.tif"
 
 benchmark imwand.py "./imwand.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
-
 echo -n jpg-
 benchmark convert "./im.sh $tmp/x.jpg $tmp/x2.jpg"
 
-g++ -g -Wall opencv.cc `pkg-config opencv --cflags --libs` -o opencv
+g++ -g -Wall opencv.cc `pkg-config opencv4 --cflags --libs` -o opencv
 benchmark opencv "./opencv $tmp/x.tif $tmp/x2.tif"
+
+benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
+
+benchmark imagej "imagej -x 1000 -i $tmp/x-strip.tif -b bench.ijm"
+
+benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
 
 gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
 benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
@@ -177,21 +185,14 @@ benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x-strip.tif $tmp/x2.tif"
 
-benchmark oiio "./oiio.sh $tmp/x.tif $tmp/x2.tif"
-
-benchmark is "./is.rb $tmp/x-strip.tif $tmp/x2.tif"
+# broken, again, in ruby 2.7
+# benchmark is "./is.rb $tmp/x-strip.tif $tmp/x2.tif"
 
 gcc -Wall gd.c `pkg-config gdlib --cflags --libs` -o gd
 echo -n jpg-
 benchmark gd "./gd $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark imagick "./imagick.php $tmp/x.tif $tmp/x2.tif"
-
-benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
-
-benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
-
-benchmark imagej "imagej -x 1000 -i $tmp/x-strip.tif -b bench.ijm"
 
 gcc -Wall gegl.c `pkg-config gegl-0.4 --cflags --libs` -o gegl
 # gegl-0.4 doesn't have tiff support built in
@@ -201,8 +202,12 @@ gcc -Wall gegl.c `pkg-config gegl-0.4 --cflags --libs` -o gegl
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
+benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
+
+benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
+
 # this has stopped working and needs fixing
-benchmark scikit "./scikit.py $tmp/x-strip.tif $tmp/x2.tif"
+# benchmark scikit "./scikit.py $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark octave "./octave.m $tmp/x.tif $tmp/x2.tif"
 

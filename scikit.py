@@ -4,8 +4,9 @@ import sys
 import numpy as np
 from scipy import ndimage, misc
 from PIL import Image
+import imageio
 
-im = ndimage.imread(sys.argv[1])
+im = imageio.imread(sys.argv[1])
 
 width, height, bands = im.shape
 im = im[100:(width - 100), 100:(height - 100)]
