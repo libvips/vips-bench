@@ -110,7 +110,7 @@ benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
-benchmark vips-gegl.py "./vips-gegl.py $tmp/x.tif $tmp/x2.tif"
+benchmark vips-gegl.py "./vips-gegl.py $tmp/x.jpg $tmp/x2.jpg"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 export VIPS_CONCURRENCY=1
@@ -199,6 +199,9 @@ gcc -Wall gegl.c `pkg-config gegl-0.4 --cflags --libs` -o gegl
 # echo -n tiff-
 # benchmark gegl "./gegl $tmp/x.tif $tmp/x2.tif"
 # this fails with an assert() error on ubuntu 19.04
+# don't use opencl and threads ... we want to avoid opencl's thread system
+export GEGL_THREADS=16
+export GEGL_USE_OPENCL=no
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
