@@ -1,6 +1,6 @@
 #!/usr/bin/luajit
 
-local vips = require("vips")
+vips = require("vips")
 
 image = vips.Image.new_from_file(arg[1], {access = "sequential"})
 

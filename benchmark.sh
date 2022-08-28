@@ -88,18 +88,21 @@ rm -f *.csv
 
 echo "program, time (s), peak memory (MB)"
 
+# gm, im etc. control concurreny with this ... but leave at the default
+export OMP_NUM_THREADS=16
+
+# don't use hyperthreading with libvips: this is an int workload and sees no
+# benefit, and in fact a slight slowdown due to thread management
 export VIPS_CONCURRENCY=16
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n ppm-
 benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
 
-benchmark tiffcp "tiffcp -s $tmp/x.tif $tmp/x2.tif"
+benchmark tiffcp "tiffcp -m 400000000 -s $tmp/x.tif $tmp/x2.tif"
 
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 benchmark vips-c "./vips-c $tmp/x.tif $tmp/x2.tif"
-
-benchmark vips.lua "./vips.lua $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.php "./vips.php $tmp/x.tif $tmp/x2.tif"
 
@@ -107,6 +110,8 @@ g++ vips.cc `pkg-config vips-cpp --cflags --libs` -o vips-cc
 benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
+
+benchmark lua-vips.lua "./lua-vips.lua $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
 
@@ -122,9 +127,9 @@ gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark pillow "./pillow.py $tmp/x-strip.tif $tmp/x2.tif"
+benchmark pillow-simd "./pillow.py $tmp/x-strip.tif $tmp/x2.tif"
 
-benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
+benchmark vips-cli "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
 # sadly bitrotted in the shifting sands of node 
 # benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
@@ -182,6 +187,8 @@ benchmark econvert "./ei.sh $tmp/x-strip.tif $tmp/x2.tif"
 gcc -Wall imlib2.c `pkg-config imlib2 --cflags --libs` -o imlib2
 benchmark imlib2 "./imlib2 $tmp/x.tif $tmp/x2.tif"
 
+benchmark magick "./im7.sh $tmp/x.tif $tmp/x2.tif"
+
 gcc freeimage.c -lfreeimage -o freeimage
 benchmark freeimage "./freeimage $tmp/x-strip.tif $tmp/x2.tif"
 
@@ -205,7 +212,8 @@ export GEGL_USE_OPENCL=no
 echo -n jpg-
 benchmark gegl "./gegl $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
+# no longer in ubuntu 22.04
+# benchmark pike "./image.pike $tmp/x.tif $tmp/x2.tif"
 
 benchmark gmic "./gmic.sh $tmp/x.tif $tmp/x2.tif"
 
