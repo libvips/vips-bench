@@ -35,7 +35,7 @@ to lag as well.
 # Results
 
 The [speed and memory use
-page](https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use) on the
+page](https://github.com/libvips/libvips/wiki/Speed-and-memory-use) on the
 libvips website has a table of results.
 
 # TODO
