@@ -6,7 +6,7 @@
 import sys
 import pyvips
 
-im = pyvips.Image.new_from_file(sys.argv[1], access='sequential')
+im = pyvips.Image.new_from_file(sys.argv[1])
 
 im = im.bandjoin(255)
 im = im.colourspace('scrgb')

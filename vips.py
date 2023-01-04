@@ -3,7 +3,7 @@
 import sys
 import pyvips
 
-im = pyvips.Image.new_from_file(sys.argv[1], access='sequential')
+im = pyvips.Image.new_from_file(sys.argv[1])
 
 im = im.crop(100, 100, im.width - 200, im.height - 200)
 im = im.reduce(1.0 / 0.9, 1.0 / 0.9, kernel='linear')

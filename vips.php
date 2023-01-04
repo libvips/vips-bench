@@ -5,7 +5,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Jcupitt\Vips;
 
-$im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
+$im = Vips\Image::newFromFile($argv[1]);
 
 $im = $im->crop(100, 100, $im->width - 200, $im->height - 200);
 

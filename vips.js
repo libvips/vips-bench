@@ -2,7 +2,7 @@
 
 var vips = require('../node-vips');
 
-image = vips.Image.newFromFile(process.argv[2], {access: 'sequential'});
+image = vips.Image.newFromFile(process.argv[2]);
 
 image = image.crop(100, 100, image.width - 200, image.height - 200);
 
