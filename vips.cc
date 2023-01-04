@@ -15,9 +15,7 @@ main( int argc, char **argv )
 	if( VIPS_INIT( argv[0] ) )
 		return( -1 );
 
-	VImage in = VImage::new_from_file( argv[1], 
-		VImage::option()-> 
-			set( "access", VIPS_ACCESS_SEQUENTIAL ));
+	VImage in = VImage::new_from_file( argv[1] ); 
 
 	VImage mask = VImage::new_matrixv( 3, 3, 
 		-1.0, -1.0, -1.0, -1.0, 16.0, -1.0, -1.0, -1.0, -1.0 );
