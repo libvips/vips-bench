@@ -23,11 +23,14 @@ particular, make sure you have all the packages installed. On Ubuntu, you
 can do this by running
 
 	sudo apt-get install imagemagick graphicsmagick libopencv-dev \
-		python-imaging netpbm libvips nip2 libfreeimage-dev \
-		exactimage
+		python-imaging netpbm libfreeimage-dev \
+		exactimage gegl composer libvips nip2
 
 	gem install rmagick ruby-vips image_science
-
+	
+	pip install gdlib pyvips
+	
+Skip libvips and nip2 if you already have them installed.
 You may need more recent versions of some packages. The netpbm in Ubuntu is
 very old and installing from the website is a good idea. Ubuntu libvips tends
 to lag as well.
