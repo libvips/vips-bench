@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # watch the output of ps, sum RSS of processes matching a pattern and output
 # time and size in MB

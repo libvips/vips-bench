@@ -1,4 +1,4 @@
-#!/usr/bin/ruby 
+#!/usr/bin/env ruby
 
 # from http://tstarling.com/blog/2010/06/measuring-memory-usage-with-strace
 

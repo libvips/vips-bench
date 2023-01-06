@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # watch the output of top -b, sum RES of processes matching a pattern and output
 # time and size in MB
