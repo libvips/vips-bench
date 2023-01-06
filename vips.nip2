@@ -1,4 +1,4 @@
-#!/home/john/vips/bin/nip2 -s
+#!/usr/bin/nip2 -s
 
 main
   = error "usage: infile -o outfile", argc != 2
