@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # use pyvips, but try to match the exact processing that the gegl code is
 # doing, so everything is float, RGBA, and in linear light
