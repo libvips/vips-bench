@@ -13,7 +13,11 @@ $im->cropImage($geo['width'] - 200, $geo['height'] - 200, 100, 100);
 $geo = $im->getImageGeometry(); 
 $im->resizeImage($geo['width'] * 0.9, $geo['height'] * 0.9, imagick::FILTER_TRIANGLE, 1);
 
-$kernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1];
+$kernel = ImagickKernel::fromMatrix([
+    [-1, -1, -1], 
+    [-1, 8, -1], 
+    [-1, -1, -1]
+]);
 $im->convolveImage($kernel);
 
 $im->writeImage($argv[2]);

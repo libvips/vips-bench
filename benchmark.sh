@@ -144,6 +144,8 @@ benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
 
 benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
 
+benchmark nip4 "./vips.nip4 $tmp/x.tif -o $tmp/x2.tif"
+
 # OS X only
 # benchmark sips "./sips.sh $tmp/x.tif $tmp/x2.tif"
 
