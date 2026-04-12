@@ -1,0 +1,17 @@
+#!/usr/bin/env snip
+
+do_crop image
+    = crop 100 100 (image.width - 200) (image.height - 100) image;
+do_reduce image
+    = reduce [] 1.11 1.11 image;
+do_sharpen image
+    = conv [$precision => $integer] mask image
+{
+    mask = Matrix_con 8 0 [
+        [-1, -1,  -1], 
+        [-1,  16, -1], 
+        [-1, -1,  -1]
+    ];
+}
+
+main = (do_sharpen @ do_reduce @ do_crop) (Image_file argv?1);

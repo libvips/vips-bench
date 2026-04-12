@@ -5,4 +5,4 @@ scale="iw*.9:ih*.9"
 kernel="-1 -1 -1 -1 16 -1 -1 -1 -1"
 conv="$kernel:$kernel:$kernel:$kernel:1/8:1/8:1/8:1/8"
 
-ffmpeg -y -i $1 -vf "crop=$crop, scale=$scale, convolution=$conv" $2
+ffmpeg -y -i $1 -vf "crop=$crop, scale=$scale, convolution=$conv" -update true $2

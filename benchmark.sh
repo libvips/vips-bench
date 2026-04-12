@@ -95,6 +95,7 @@ export OMP_NUM_THREADS=16
 # benefit, and in fact a slight slowdown due to thread management
 export VIPS_CONCURRENCY=16
 
+
 gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n ppm-
 benchmark vips-c "./vips-c $tmp/x.ppm $tmp/x2.ppm"
@@ -111,11 +112,11 @@ benchmark vips-cc "./vips-cc $tmp/x.tif $tmp/x2.tif"
 
 benchmark vips.py "./vips.py $tmp/x.tif $tmp/x2.tif"
 
-benchmark nip4 "./vips.nip4 $tmp/x.tif -o $tmp/x2.tif"
-
 benchmark lua-vips.lua "./lua-vips.lua $tmp/x.tif $tmp/x2.tif"
 
 benchmark ruby-vips "./ruby-vips.rb $tmp/x.tif $tmp/x2.tif"
+
+benchmark snip "./snip-bench.def $tmp/x.tif -o $tmp/x2.tif"
 
 benchmark vips-gegl.py "./vips-gegl.py $tmp/x.jpg $tmp/x2.jpg"
 
@@ -129,9 +130,11 @@ gcc -Wall vips.c `pkg-config vips --cflags --libs` -o vips-c
 echo -n jpg-
 benchmark vips-c "./vips-c $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark pillow-simd "./pillow.py $tmp/x-strip.tif $tmp/x2.tif"
+echo check for pillow-simd
+benchmark pillow "./pillow.py $tmp/x-strip.tif $tmp/x2.tif"
 
-benchmark vips-cli "./vips.sh $tmp/x.tif $tmp/x2.tif"
+echo vips-cli
+benchmark vips "./vips.sh $tmp/x.tif $tmp/x2.tif"
 
 # sadly bitrotted in the shifting sands of node 
 # benchmark vips.js "./vips.js $tmp/x.tif $tmp/x2.tif"
@@ -144,10 +147,8 @@ benchmark gm "./gm.sh $tmp/x.tif $tmp/x2.tif"
 echo -n jpg-
 benchmark gm "./gm.sh $tmp/x.jpg $tmp/x2.jpg"
 
-benchmark nip2 "./vips.nip2 $tmp/x.tif -o $tmp/x2.tif"
-
 # does not support tiled tif
-benchmark ffmpeg "./ffmpeg.sh $tmp/x-strip.tif -o $tmp/x2.tif"
+benchmark ffmpeg "./ffmpeg.sh $tmp/x-strip.tif $tmp/x2.tif"
 
 # OS X only
 # benchmark sips "./sips.sh $tmp/x.tif $tmp/x2.tif"
