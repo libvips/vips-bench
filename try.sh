@@ -11,6 +11,17 @@ sleep 2
 time ./rmagick.rb wtc_tiled_small.tif x.tif
 sleep 2
 
+echo mini_magick.rb
+
+time ./mini_magick.rb wtc_tiled_small.tif x.tif
+sleep 2
+time ./mini_magick.rb wtc_tiled_small.tif x.tif
+sleep 2
+time ./mini_magick.rb wtc_tiled_small.tif x.tif
+sleep 2
+time ./mini_magick.rb wtc_tiled_small.tif x.tif
+sleep 2
+
 echo vips.py
 
 time ./vips.py wtc_tiled_small.tif x.tif

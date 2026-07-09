@@ -158,6 +158,8 @@ benchmark pnm "./netpbm.sh $tmp/x-strip.tif $tmp/x2.tif"
 
 benchmark rmagick "./rmagick.rb $tmp/x.tif $tmp/x2.tif"
 
+benchmark mini_magick "./mini_magick.rb $tmp/x.tif $tmp/x2.tif"
+
 # this needs careful config, see
 # https://github.com/jcupitt/vips-bench/issues/4
 YMAGINE=/home/john/ymagine
