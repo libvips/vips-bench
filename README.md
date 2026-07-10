@@ -31,7 +31,7 @@ available everywhere.
     python3 -m venv ~/vips
     . ~/vips/bin/activate
     pip install pyvips Pillow-SIMD gdlib 
-	gem install rmagick ruby-vips image_science
+	gem install rmagick mini_magick ruby-vips image_science
 ```
 
 Then run the driver script:
